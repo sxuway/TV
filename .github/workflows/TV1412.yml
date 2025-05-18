@@ -1,0 +1,27 @@
+name: Build APK
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # 缩进对齐，删除多余横杠
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
+      - name: Grant Gradle permission
+        run: chmod +x ./gradlew  # 修正命令（你写成了 "gradlen" 和 "vx"）
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease  # 修正命令（gradlew 非 gradlen）
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: TV-Release.apk
+          path: app/build/outputs/apk/release/app-release.apk
