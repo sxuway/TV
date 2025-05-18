@@ -1,0 +1,27 @@
+name: Build APK
+on: [workflow_dispatch]  # 手动触发编译
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 使用最新 Ubuntu 系统
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # 拉取代码
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'  # 指定 JDK 版本
+
+      - name: Grant Gradle permission
+        run: chmod +x ./gradlew  # 赋予 Gradle 执行权限
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease  # 编译 APK
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: TV-Release.apk  # 产物名称
+          path: app/build/outputs/apk/release/app-release.apk  # APK 路径
